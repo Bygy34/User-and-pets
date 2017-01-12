@@ -1,0 +1,36 @@
+<h2>album</h2>
+<div ng-controller="userController">
+    <div>
+        <input type="text" id="AddPet" value="Add name of Pet" />
+<button ng-click="AddPet($('#AddUser').value)">
+    add Pet
+</button>
+        {{user.userId}}
+        <table border="1">
+            <thead>
+                <tr>
+                    <td colspan="2">
+                        Owners
+                    </td>
+                </tr>
+            </thead>
+            <tfoot ng-repeat="item in UserList   ">
+                <tr ng-repeat="owner in item.Owners | filter:{UserId:user.userId}|startFrom:currentPage*pageSize | limitTo:pageSize">
+                    <td>
+                        {{owner.PetName}}
+                    </td>
+                    <td>
+                        <button ng-click="DelIdUser(item.id)">Delete</button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
+            Previous
+        </button>
+        {{currentPage+1}}/{{numberOfPages()}}
+        <button ng-disabled="currentPage >= UserList.length/pageSize - 1" ng-click="currentPage=currentPage+1">
+            Next
+        </button>
+    </div>
+</div>

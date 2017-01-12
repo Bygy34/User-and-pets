@@ -1,0 +1,31 @@
+<h2>Index</h2>
+<div>
+    <div ng-controller="defaultCtrl">
+        <input type="text" id="AddUser" value="Add name of User"/>
+        <button ng-click="AddUser($('#AddUser').value)">
+            add User
+        </button>
+        {{user.userId}}
+        <table border="1">
+            <tr>
+                <td>UserName</td>
+                <td>Owners</td>
+            </tr>
+            <tr ng-repeat="item in UserList  |startFrom:currentPage*pageSize | limitTo:pageSize">
+                <td>
+                    <a href="#/album/{{item.Id}}" ng-click="getIdUser(item.Id)">{{item.UserName}}</a>
+                </td>
+                <td>
+                    {{item.Owners.length}} <button ng-click="DelIdUser(item.id)">Delete</button>
+                </td>
+            </tr>
+        </table>
+        <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
+            Previous
+        </button>
+        {{currentPage+1}}/{{numberOfPages()}}
+        <button ng-disabled="currentPage >= UserList.length/pageSize - 1" ng-click="currentPage=currentPage+1">
+            Next
+        </button>
+    </div>
+</div>

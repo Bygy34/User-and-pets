@@ -1,0 +1,23 @@
+<!doctype html>
+<html ng-app="todoApp">
+  <head>
+      <meta charset="utf-8">
+    <link rel="stylesheet" href="todo.css">
+  </head>
+
+  <body ng-controller="mainController">
+      {{user.userId}}
+    <a href="#/">Home</a>
+    <a href="#/album">Album</a>
+    <a href="#/image">image</a>
+    
+    <div ng-view>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.js"></script>
+    <script src="route.js"></script>
+    <script src="todo.js"></script>
+  </body>
+
+</html>
