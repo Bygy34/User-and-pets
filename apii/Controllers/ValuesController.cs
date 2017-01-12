@@ -1,39 +1,78 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Web.Http;
+using apii.Models;
+using System.Linq;
+using System.Web.Http.Description;
+using System.Web.Http.Cors;
 
-namespace apii.Controllers
+namespace BookStore.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class ValuesController : ApiController
     {
-        // GET api/values
-        public IEnumerable<string> Get()
+        UserContext db = new UserContext();
+
+        //"http://localhost:54869/api/values/GetUser"
+        [Route("api/values/GetUser")]
+        [DisableCors]
+        public IEnumerable<User> GetUser()
         {
-            return new string[] { "value1", "value2" };
+            return db.Users.Include("Owners").ToList();
         }
 
-        // GET api/values/5
-        public string Get(int id)
+        [Route("api/values/GetUser/{id}")]
+        [DisableCors]
+        [ResponseType(typeof(User))]
+        public IHttpActionResult GetUser(int id)
         {
-            return "value";
+            User user = db.Users.Find(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
         }
 
-        // POST api/values
-        public void Post([FromBody]string value)
+
+        [HttpPost]
+        [DisableCors]
+        public void CreateBook([FromBody]User book)
         {
+            db.Users.Add(book);
+            db.SaveChanges();
         }
 
-        // PUT api/values/5
-        public void Put(int id, [FromBody]string value)
+        [HttpPut]
+        public void EditBook(int id, [FromBody]User book)
         {
+            if (id == book.Id)
+            {
+                db.Entry(book).State = EntityState.Modified;
+
+                db.SaveChanges();
+            }
         }
 
-        // DELETE api/values/5
-        public void Delete(int id)
+        [Route("api/Book/{id}")]
+        [DisableCors]
+        public void DeleteBook(int id)
         {
+            User book = db.Users.Find(id);
+            if (book != null)
+            {
+                db.Users.Remove(book);
+                db.SaveChanges();
+            }
+        }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
